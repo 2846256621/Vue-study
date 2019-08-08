@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>数据绑定</title>
+</head>
+<body>
+<div id="app">
+    <!--响应数据绑定-->
+    <h1>{{foo}}</h1>
+    <!--一次性数据绑定-->
+    <h2 v-once>{{foo}}</h2>
+
+
+    <div>{{message}}</div>
+    <!--渲染html-->
+    <div v-html="message"></div>
+    <!--渲染文本-->
+    <div v-text="message"></div>
+    <hr>
+    <!--v-bind只能用于属性绑定-->
+    <ul>
+        <li v-for="item in todos">
+            <a v-bind:href="'/01-helloWorld.html?id='+item.id">{{item.title}}</a>
+        </li>
+    </ul>
+</div>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    const app = new Vue({
+        el:'#app',
+        data:{
+            foo:'hello',
+            bar:'world',
+            message:"<h3>翻山倒海</h3>",
+            todos:[
+                {
+                    id:1,
+                    title:'aaaa'
+                },
+                {
+                    id:2,
+                    title:'bbbb'
+                },
+                {
+                    id:3,
+                    title:'acccca'
+                }
+            ]
+        }
+    });
+</script>
+</body>
+</html>

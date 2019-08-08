@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> 传统-多页面开发-前后端分离</title>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/art-template/lib/template-web.js"></script>
+</head>
+<body>
+    <div class="header">
+        头部
+    </div>
+    <div class="aside">
+        侧边栏
+    </div>
+    <a href="datas/add.html">添加datas</a>
+    <ul id="container"></ul>
+
+    <script id="tp1" type="text/template">
+        {{each data}}
+        <li>{{$value.title}}</li>
+        {{/each}}
+    </script>
+<script>
+    $(function () {
+        $.ajax({
+            url:'http://localhost:8080/datas',
+            type:'GET',
+            dataType:'json',
+            success:function (data) {
+                let html = template('tp1',{
+                    data:data
+                });
+                $('#container').html(html);
+                console.log(html);
+            }
+        });
+    });
+</script>
+
+
+
+</body>
+</html>

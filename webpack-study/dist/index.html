@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--不推荐在这里引用静态资源及任何包
+    推荐把 资源加载/包引入 放在main.js中 但main.js文件里有eas语法 浏览器不识别
+     将main.js转变成bundle.js  提高资源加载的速度 会增加页面的加载速度-->
+
+    <!--生成内存html文件，自动追加了 bundle.js 所以不需要引入-->
+    <!--<script src="/bundle.js"></script>-->
+</head>
+<body>
+<ul>
+    <li>这是第1个</li>
+    <li>这是第2个</li>
+    <li>这是第3个</li>
+    <li>这是第4个</li>
+    <li>这是第5个</li>
+    <li>这是第6个</li>
+    <li>这是第7个</li>
+    <li>这是第8个</li>
+    <li>这是第9个</li>
+    <li>这是第10个</li>
+</ul>
+<script type="text/javascript" src="bundle.js"></script></body>
+</html>
+

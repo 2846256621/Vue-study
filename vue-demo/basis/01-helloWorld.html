@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <h1> {{1+1}}</h1>
+        <h1>{{'hello' +'world'}}</h1>
+        <h1>{{message}}</h1>
+        <h1>{{message}}</h1>
+        <h1>{{message}}</h1>
+    </div>
+<!--
+    1.引包
+    2.new Vue 得到vue实例
+       相当于一个高级模板引擎
+       无dom操作
+    -->
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    const  app = new Vue({
+        el:'#app', //el选项的作用 是告诉vue 管理模板的入口结点  div#app的所以结点都被vue管理了
+        //data中的数据是响应式数据 --- 数据驱动视图  数据变化，即视图中的Dom自动发生改变（MVVM）
+        data:{
+            message:"hello vue.js"
+        }
+    })
+</script>
+</body>
+</html>

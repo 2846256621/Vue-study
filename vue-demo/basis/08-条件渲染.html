@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>条件渲染</title>
+    <style>
+        .con{
+            background-color: #f49191;
+            width: 300px;
+            height: 100px;
+        }
+        .add{
+            background-color: #b1b0ea;
+            width: 200px;
+            height: 200px;
+            border: 1px solid #3d3e40;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div v-bind:class="{con:styles,add:add}"></div>
+    <hr>
+
+    <div v-if="type === 'A'">
+        A
+    </div>
+    <div v-else-if="type === 'B'">
+        B
+    </div>
+    <div v-else>
+        Not A/B/C
+    </div>
+
+    <div v-if="seen">
+        你看不见我
+    </div>
+    <hr>
+    <input type="text" v-bind:placeholder="tip" v-on:focus="handleInput">
+
+
+    <!--@click.prevent 点击阻止默认行为， .prevent是修饰符-->
+    <a href="http://www.baidu.com" @click.prevent="gotoBaidu">去百度</a>
+</div>
+
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    const app = new Vue({
+        el:'#app',
+        data:{
+            type:'B',
+            seen:false,
+            tip:"请输入你想说的话",
+            styles:true,
+            add:undefined
+        },
+        methods:{
+            handleInput:function () {
+                console.log(this.tip);
+            },
+            gotoBaidu(){
+                console.log(去百度)
+            }
+        }
+    });
+</script>
+</body>
+</html>

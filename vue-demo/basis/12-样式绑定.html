@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #app{
+            width: 375px;
+            height: 300px;
+            border-radius: 10px;
+            background-color: #9dd2ea;
+            position: absolute;
+            left: 50%;
+            top:50%;
+            transform: translate(-50%,-50%);
+        }
+        .active{
+            color: red;
+        }
+        .box{
+            width: 100px;
+            height: 100px;
+            background-color: #f49191;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div v-bind:class="{active :isActive}"> 你好class </div>
+    <div v-bind:style="{backgroundColor:backgroundColor}"> 你好 style</div>
+    <input type="checkbox" v-model="checked" >选择<br>
+
+    <!--v-bind:value单向的数据绑定 value的改变不会影响数据 -->
+    <input type="text" v-bind:value="message" >
+
+    <div class="div">
+        <input type="checkbox" v-model="seen">
+        <br>
+        <div class="box" v-if="seen"></div>
+    </div>
+    <hr>
+    <!--用户输入的数据是字符串  转换成数字.number 属性-->
+    <input type="number" v-model.number="number">
+    <button @click="handleClick">点击获取number</button>
+</div>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    const app = new Vue({
+        el:'#app',
+        data:{
+            isActive:true,
+            isError:false,
+            backgroundColor:'#cccccc',
+            checked:false,
+            message:"hello",
+            seen:true,
+            number:10
+        },
+        methods:{
+            handleClick(){
+                console.log(this.number+1)
+            }
+        }
+    })
+</script>
+</body>
+</html>

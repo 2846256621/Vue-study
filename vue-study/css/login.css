@@ -1,0 +1,38 @@
+#app{
+    width: 500px;
+    height: 300px;
+    margin: 20px;
+    border: 1px solid #cccccc;
+    padding:50px;
+}
+.signup{
+    float: right;
+    margin-right: 10px;
+}
+a{
+    text-decoration: none;
+}
+a:focus, a:hover {
+    color: #df5651;
+    text-decoration: none;
+}
+/*官方提供的类*/
+/*.router-link-exact-active,.router-link-active{*/
+/*font-size: 17px;*/
+/*text-decoration: none;*/
+/*color: #5bc0de;*/
+/*cursor: pointer;*/
+/*}*/
+/*自定义的类*/
+.myactive{
+    font-size: 17px;
+    text-decoration: none;
+    cursor: pointer;
+}
+.v-enter,.v-leave-to{
+    opacity: 0;
+    transform: rotateX(180deg);
+}
+.v-enter-active,.v-leave-active{
+    transition: all .5s ease-in;
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <div v-bind:title="message">鼠标悬停出现提示 文字</div>
+
+</div>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    const app = new Vue({
+        el:'#app',
+        data:{
+            message:"页面加载于 "+new Date().toLocaleString(),
+        }
+    });
+</script>
+</body>
+</html>

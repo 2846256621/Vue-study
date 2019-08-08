@@ -1,0 +1,45 @@
+*{
+    margin: 0;
+    padding:0;
+}
+html,body{
+    width: 100%;
+    height: 100%;
+    /*默认情况下 webpack不能处理css中的URl地址  不管是 图片 还是 字体
+    需要导入url-loader file-loader
+    要在webpack.config.js中配置 module
+    图片会自动转换成base64编码
+    */
+    background-image: url("../image/1.jpg");
+    background-size: cover;
+}
+#app{
+    width: 80%;
+    height: 500px;
+    position: absolute;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+}
+li{
+    list-style: none;
+    padding: 10px;
+    width: 80%;
+    opacity: .7;
+}
+#app button{
+    width: 120px;
+    height: 35px;
+    border: 1px solid #cccccc;
+    background-color: antiquewhite;
+    border-radius: 5px;
+    outline:none;
+    cursor: pointer;
+}
+#btn{
+    margin: 20px 0;
+}
+li .iconfont{
+    font-size: 21px;
+    margin: 0 10px;
+}

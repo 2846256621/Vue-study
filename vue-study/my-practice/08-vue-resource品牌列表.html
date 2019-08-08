@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>品牌管理+vue-resource</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-resource-1.3.4.js"></script>
+    <link href="../lib/bootstrap-3.3.7.css" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        #app{
+            margin: 4%;
+            border: 1px solid #cccccc;
+        }
+        .title{
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="app" class="col-md-11" >
+    <div class="title">
+        <h3>品牌管理</h3>
+    </div>
+    <hr>
+    <br>
+    <div class="form-inline">
+        <label>
+            品牌名：<br>
+            <input type="text" name="name" value="" class="form-control"
+                   v-model="name" @keydown.enter="handleEnterAdd">
+        </label>
+        <input type="button" value="点击添加" class="btn btn-success" @click="handleAdd">
+    </div>
+    <br>
+    <div>
+        <label>
+            输入关键字进行查询：<input type="text" name="search" value="" class="form-control"
+                             v-model="keywords" @keydown.enter="Search">
+        </label>
+    </div>
+    <hr>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered ">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>名字</th>
+                <th>生产日期</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="item in list" :key="item.id">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <!--时间个格式化 利用过滤器去判断-->
+                <td>{{item.date | dateFormat}}</td>
+                <td @click="handleDelete(item.id)" style="cursor: pointer">删除</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    //时间格式  使用过滤器  参数使用默认值-->针对 万一没有传参
+    Vue.filter('dateFormat',function (date,dtFormatstr="") {
+        let dt = new Date();
+        let y = dt.getFullYear();
+        let m = (dt.getMonth() +1).toString().padStart(2,'0');
+        let d = dt.getDate().toString().padStart(2,'0');
+        if(dtFormatstr.toLowerCase() === 'yyyy-mm-dd'){
+            return `${y}-${m}-${d} `
+        }
+        else {
+            let hh = dt.getHours();
+            let mm = dt.getMinutes().toString().padStart(2,'0');
+            let ss = dt.getSeconds().toString().padStart(2,'0');
+            return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+        }
+    });
+
+    /***设置请求的根路径
+     * 方便修改
+     * 使用相对路径
+     * 请求前面不带斜线
+    */
+    Vue.http.options.root = 'http://localhost:8080/';
+
+
+    /**
+     * 全局启用emulateJSON 选项  post请求体  内部就不需要再写了*/
+    Vue.http.options.emulateJSON = true;
+
+
+    new Vue({
+        el: '#app',
+        data: {
+            name: "",
+            keywords: "",
+            list: "", //请求的列表
+
+        },
+        //数据加载完成  在这里去发ajax
+        created() {
+            this.getAllList()
+        },
+        methods: {
+            //获取数据列表
+            getAllList() {
+                this.$http.get('').then(function (result) {
+                    if (result.body.status === 0) {
+                        this.list = result.body.list
+                    } else {
+                        alert("获取数据失败")
+                    }
+                })
+            },
+            //添加
+            handleAdd() {
+                let data = {
+                    id: parseInt(this.list[this.list.length - 1].id) + 1,
+                    name: this.name,
+                    date: new Date()
+                };
+                this.$http.post('add', data).then(function (result) {
+                    console.log(result.body);
+                    if (result.body.status === 0) {
+                        this.getAllList(); //添加完成后，重新获取列表数据
+                    }
+                    else {
+                        alert("添加失败")
+                    }
+                });
+                this.name = '';
+            },
+            //回车添加
+            handleEnterAdd() {
+                let data = {
+                    id: parseInt(this.list[this.list.length - 1].id) + 1,
+                    name: this.name,
+                    date: new Date()
+                };
+                this.$http.post('add', data).then(function (result) {
+                    // console.log(result.body);
+                    if (result.body.status === 0) {
+                        this.getAllList(); //添加完成后，重新获取列表数据
+                    }
+                    else {
+                        alert("添加失败")
+                    }
+                });
+                this.name = '';
+            },
+            //根据id 删除
+            handleDelete(id) {
+                this.$http.get('del?id=' + id).then(function (result) {
+                    if (result.body.status === 0) {
+                        this.getAllList(); //添加完成后，重新获取列表数据
+                    }
+                    else {
+                        alert("添加失败")
+                    }
+                });
+            },
+            //根据关键字 进行搜索 不能再原本的list 对象数组上做修改，得新创建数组进行操作
+            Search(keywords) {
+                if(this.keywords.trim() === ""){
+                    this.getAllList();
+                }
+                this.$http.get('search?name='+this.keywords).then(function (result) {
+                    this.list = result.data;
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>名称案例computed</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-router-3.0.7.js"></script>
+</head>
+<body>
+<!--实现名字的拼接-->
+<div id="app">
+    <input type="text" v-model="firstname">+
+    <input type="text" v-model="lastname">=
+    <input type="text" v-model="fullname" >
+    <p>{{fullname}}</p>
+</div>
+
+
+
+<script>
+    const app = new Vue({
+        el:'#app',
+        data:{
+            firstname:'',
+            lastname:''
+        },
+        methods:{},
+        computed: {
+            //fullname 不用在data里定义  可以直接在computed里定义使用
+            //计算属性内部的任何数据发生改变，则会重新计算结果  结果是return出来的
+            'fullname': function () {
+                return this.firstname + '-' + this.lastname;
+            }
+        }
+    })
+</script>
+</body>
+</html>

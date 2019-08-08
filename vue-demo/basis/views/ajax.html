@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <button @click="send">发送AJAX请求</button>
+
+    <button @click="sendGet">GET方式发送AJAX请求</button>
+</div>
+<script src="../../node_modules/vue/dist/vue.js"></script>
+<script>
+       const app = new Vue({
+            el:'#app',
+            data:{
+                user:{
+                    name:'alice',
+                    age:19
+                },
+            },
+            methods:{
+                send(){
+                    axios({
+                        method:'get',
+                        url:'http://www.baidu.com?name=tom&age=23'
+                    }).then(function(resp){
+                        console.log(resp.data);
+                    }).catch(resp => {
+                        console.log('请求失败：'+resp.status+','+resp.statusText);
+                    });
+                },
+                sendGet(){
+                    axios.get('server.php',{
+                        params:{
+                            name:'alice',
+                            age:19
+                        }
+                    })
+                        .then(resp => {
+                            console.log(resp.data);
+                        }).catch(err => {             //
+                        console.log('请求失败：'+err.status+','+err.statusText);
+                    });
+                },
+            }
+        });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>路由命名视图-实现经典布局</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-router-3.0.7.js"></script>
+    <link href="../lib/bootstrap-3.3.7.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/login.css">
+    <style >
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        #app{
+            width: 100%;
+            border: none;
+        }
+        .header{
+            width: 100%;
+            height: 100px;
+            border: 1px solid #444444;
+            background-color: #9bc97b;
+        }
+        .main{
+            display: flex;
+            height: 500px;
+        }
+        .aside{
+            flex: 2;
+            background-color: #f49191;
+        }
+        .container{
+            flex: 8;
+            background-color: #93c6de;
+        }
+        .from{
+            width: 500px;
+            height: 350px;
+            margin: 20px;
+            border: 1px solid #cccccc;
+            padding:50px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app">
+    <!--放三个组件  创建三个router-view-->
+    <!--命名视图  三个部分 分别展示-->
+    <router-view></router-view>
+    <div class="main">
+        <router-view name="aside"></router-view>
+        <router-view name="container"></router-view>
+    </div>
+
+</div>
+
+<template id="header">
+    <div class="header">这是头部</div>
+</template>
+<template id="aside">
+    <div class="aside">这是侧边栏</div>
+</template>
+<template id="container">
+    <div class="container">
+        这是主要内容
+        <!--<div class="from">-->
+            <!--<router-link to="/container/login">登录</router-link>-->
+            <!--<router-link to="/container/signup" class="signup">注册</router-link>-->
+            <!--<transition mode="out-in">-->
+                <!--<router-view></router-view>-->
+            <!--</transition>-->
+        <!--</div>-->
+
+    </div>
+</template>
+<template id="signup">
+    <form class="form-inline">
+        <label>
+            用户名：<input type="text" name="username" value="" placeholder="请输入用户名" class="form-control">
+        </label>
+        <br>
+        <label>
+            密码：<input type="text" name="username"  value="" placeholder="请输入密码" class="form-control">
+        </label>
+        <br>
+        <label>
+            确认密码：<input type="text" name="username"  value="" placeholder="请再次输入密码" class="form-control">
+        </label>
+        <br>
+        <input type="submit" value="注册" class="btn btn-primary">
+    </form>
+</template>
+
+<template id="login">
+    <form class="form-inline">
+        <label>
+            用户名：<input type="text" name="username"  value="" placeholder="请输入您的用户名" class="form-control">
+        </label>
+        <br>
+        <label>
+            密码：<input type="text" name="username" value="" placeholder="请输入您的密码" class="form-control">
+        </label>
+        <br>
+        <input type="submit" value="登录" class="btn btn-success">
+    </form>
+</template>
+<script>
+    let headerBox = {
+        template:'#header'
+    };
+    let asideBox = {
+        template:'#aside'
+    };
+    let containerBox ={
+        template:'#container'
+    };
+    // let login = {
+    //     template:'#login'
+    // };
+    // let signup = {
+    //     template: '#signup'
+    // };
+
+    let routerObj = new VueRouter({
+       routes:[
+           //一个路径下面 挂载了三个组件
+           {   path:'/',
+               components:{
+                   'default':headerBox,
+                   'aside':asideBox,
+                   'container':containerBox
+               }
+           },
+           // {
+           //     path:'/container',components:containerBox,
+           //     children:[
+           //         {path:'login',components:login},
+           //         {path:'signup',components:signup}
+           //     ]
+           // }
+       ],
+        linkActiveClass:'myactive', //自定义路由切换的类
+    });
+    const app = new Vue({
+        el:'#app',
+        data:{},
+        methods:{},
+        router:routerObj
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue-router 登录注册-路由切换</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <!--导入vue-router包  就有了一个构造函数 VueRouter-->
+    <script src="../lib/vue-router-3.0.7.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+    <!--登录注册的样式-->
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+<div id="app">
+    <!--利用a标签的锚点 监听路由的改 变 展示到页面的 区域 但不会刷新页面-->
+    <!--<a href="#/login" >登录</a>-->
+    <!--<a href="#/signup" class="sign">注册</a>-->
+    <!--
+        太麻烦
+    -->
+
+    <!--提供的标签  可以到对应的路由 router-link默认渲染成一个a标签   不用加 #/-->
+
+    <router-link to="/login">登录</router-link>
+    <router-link to="/signup" class="signup">注册</router-link>
+    <hr>
+    <!--router-view提供的元素 专门用来当做占位符 路由规则匹配到的组件 就会展示到这个 router-view中去 -->
+    <!--所以认为router-view 是一个占位符-->
+
+    <!--路由切换动画-->
+    <transition mode="out-in">
+        <router-view></router-view>
+    </transition>
+
+</div>
+<!--html模板-->
+<template id="signup">
+    <form class="form-inline">
+        <label>
+            用户名：<input type="text" name="username" value="" placeholder="请输入用户名" class="form-control">
+        </label>
+        <br>
+        <label>
+            密码：<input type="text" name="username"  value="" placeholder="请输入密码" class="form-control">
+        </label>
+        <br>
+        <label>
+            确认密码：<input type="text" name="username"  value="" placeholder="请再次输入密码" class="form-control">
+        </label>
+        <br>
+        <input type="submit" value="注册" class="btn btn-primary">
+    </form>
+</template>
+
+<template id="login">
+    <form class="form-inline">
+        <label>
+            用户名：<input type="text" name="username"  value="" placeholder="请输入您的用户名" class="form-control">
+        </label>
+        <br>
+        <label>
+            密码：<input type="text" name="username" value="" placeholder="请输入您的密码" class="form-control">
+        </label>
+        <br>
+        <input type="submit" value="登录" class="btn btn-success">
+    </form>
+</template>
+
+<script>
+    let login = {
+        template:'#login'
+    };
+    let signup = {
+        template: '#signup'
+    };
+    //创建路由对象 导入vue-router包  就有了一个构造函数 VueRouter
+    //在创建路由对象的时候，可以为构造函数  传递一个配置对象
+    let routerObj = new VueRouter({
+        //这个配置对象中的routes表示[路由匹配规则] 的意思
+        //路由匹配规则 每个路由规则 都是一个对象
+
+        //将 组件 映射到 路由
+        // 有两个必须的参数：
+        // 属性1：是path 表示监听哪个路由的链接地址
+        // 属性2 ：是comopnent 表示 如果前面匹配到的path，则展示component属性对应的哪个 组件
+        routes:[
+            {path:'/',redirect:'/login'},  //默认进入页面就展示的路径
+            {path:'/login',component:login}, //必须是字面量的方式注册组件名称
+            {path:'/signup',component:signup},
+        ],
+        linkActiveClass:'myactive', //自定义路由切换的类
+
+    });
+
+    const app = new Vue({
+        el:'#app',
+        data:{},
+        methods:{},
+        router:routerObj, //将路由规则，注册到vue实例上，来监听url地址的变化，然后展示对应的组件
+    })
+</script>
+</body>
+</html>

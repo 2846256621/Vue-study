@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <h1>{{message}}</h1>
+</div>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    const app = new Vue({
+        el:'#app',
+        data:{
+            message:'fff'
+        }
+    });
+    app.$data.message="ffjjfjs"; //改变初始化的值
+</script>
+
+<!--实例挂载 new Vue().$mount('#app') 相当于 el:'#app'
+    视图中的成员必须显式的初始化在data:{}中 , $data只能改变值，不能初始化
+-->
+
+</body>
+</html>

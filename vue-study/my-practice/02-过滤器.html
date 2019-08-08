@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>过滤器</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+</head>
+<body>
+<div id="app">
+    <p>{{message | messageFormat("梦想") | test}}</p>
+</div>
+<script>
+    //过滤器，接受传参，第一个参数默认是需要替换的message，第二个参数为将替换成的内容
+    //可以多个过滤器一起使用 知道过滤器调用完毕
+    //全局过滤器 所以Vue实例共享
+    Vue.filter('messageFormat',function (message,arg) {
+       return message.replace(/梦/g,arg);  //正则
+    });
+    Vue.filter('test',function (message) {
+        return message+"-----------";  //正则
+    });
+    new Vue({
+        el:'#app',
+        data:{
+            message:"浮生有梦三千场，穷尽千里诗酒荒。第一场大梦，第二场大梦，第三场，，，"
+        }
+    })
+</script>
+</body>
+</html>

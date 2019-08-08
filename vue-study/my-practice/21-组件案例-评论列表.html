@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>评论列表</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <link href="../lib/bootstrap-3.3.7.css" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        #app{
+            width: 80%;
+            margin: 5% auto;
+            border: 1px solid #cccccc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <comment @func="loadComments"></comment>
+    <ul class="list-group">
+        <li class="list-group-item" v-for="item in list">
+            <span class="badge">评论人：{{item.user}}</span>
+            {{item.content}}
+        </li>
+    </ul>
+
+</div>
+
+<template id="commentBox">
+    <div>
+        <div class="form-group">
+            <label>评论人:</label>
+            <input type="text" class="form-control" placeholder="write your name ..." v-model="user">
+        </div>
+        <div class="form-group">
+            <label>评论内容:</label>
+            <input type="text" class="form-control" placeholder="write your comment ..." v-model="content">
+        </div>
+        <div class="form-group">
+            <input type="button" class="btn btn-success" value="发表评论" @click="postComment">
+        </div>
+
+    </div>
+</template>
+<script>
+    //发表评论的盒子 组件
+    let commentBox = {
+        data(){
+          return{
+              user:"",
+              content:""
+          }
+        },
+        methods:{
+            postComment(){
+                //将发表的数据保存到localstorage中  只支持字符串 得序列化
+                //若之前发表过数据  先获取localstorage中的所以数据 localstorage.getItem() 用Json.parse转成对象 在把页面新评论push进去
+                //若 获取的localstorage中的数据为空，则可返回'[]' 让Json.parse去转换
+                //把最新的数据转换成 字符串 存入localstorage.setItem()
+
+                //1，得到当前评论数据 组成一个对象
+                let comNow = {
+                    id:Date.now(),
+                    user:this.user,
+                    content:this.content
+                };
+                //2.得到localstorage中已有的数据  取出存入的数据皆为字符串 转成对象
+                let list = JSON.parse(sessionStorage.getItem('comments')|| '[]' );
+
+                //3.对象中添加 当前一组值
+                list.unshift(comNow);
+
+                //4. 再存储到 localStorage中
+                sessionStorage.setItem('comments',JSON.stringify(list));
+
+                //5.添加完成后 清空
+                this.user = '';
+                this.content = '';
+                //6. 调用父组件的 所有获取数据  刷新 列表
+                this.$emit('func');
+            }
+        },
+
+
+        template:'#commentBox'
+    };
+    new Vue({
+        el:'#app',
+        data:{
+            list:[
+                { id: Date.now(), user: '李白', content:"天生我才必有用"},
+                { id: Date.now(), user: '小白', content: '千金散尽还复来' },
+                { id: Date.now(), user: '江小白', content: '劝君更尽一杯酒' },
+                { id: Date.now(), user: '小仙女', content: '西出阳关无故人' }
+            ]
+        },
+        created(){
+            sessionStorage.setItem('comments',JSON.stringify(this.list));
+            this.loadComments();
+        },
+        methods:{
+            //页面加载 就从loaclStorage里面读数据
+            loadComments(){
+                let list = JSON.parse(sessionStorage.getItem('comments')|| '[]' );
+                this.list = list;
+            }
+        },
+        components:{
+            comment:commentBox
+        }
+    })
+</script>
+</body>
+</html>

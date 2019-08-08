@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue组件创建</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--定义组件名称可以用驼峰 但使用的时候得用横线
+     定义组件名称是小写字母的时候，可以直接使用-->
+    <mycom></mycom>
+    <hr>
+    <mycom1></mycom1>
+    <hr>
+    <mycom2></mycom2>
+    <hr>
+    <mycom3></mycom3>
+    <hr>
+    <login></login>
+    <hr>
+    <mycom4></mycom4>
+</div>
+
+<!--使用html模板-->
+<template id="temp1">
+    <div>
+        <h2>方法四：这是template元素，在外部定义全局组件结构，方式有提示和高亮 很方便</h2>
+    </div>
+</template>
+
+<template id="temp2">
+    <div>
+        <h2>私有组件：template元素定义的私有组件</h2>
+    </div>
+</template>
+
+<template id="temp3">
+    <div>
+        <h3>这是组件内部的data 数据 {{message}}</h3>
+    </div>
+</template>
+
+<script>
+
+    //TODO 全局组件 所有的Vue实例都可以使用
+    /*** *************************   组件的四种创建方法   *****************************
+     * 方法一：
+     * 1.使用vue.extend创建全局的组件
+     * 2.使用Vue.component('组件名称',创建出来的模板对象)
+     * */
+    let com = Vue.extend({
+       template:'<h3>这是通过方法一：Vue.extend创建的组件</h3>'//通过template属性，指定了组件要砖石的html结构
+    });
+    Vue.component('mycom',com);
+
+    /**
+     * 方法二：
+     * 简化合并
+     * 使用Vue.component('组件名称',使用vue.extend创建全局的组件,其中template就是组件要展示的html内容)
+     * */
+
+    Vue.component('mycom1',Vue.extend({
+        template:`<div>
+                     <h2>这是通过方法二：Vue.extend创建的组件</h2>
+                     <span>减肥if互粉互</span>
+                 </div>`//通过template属性，指定了组件要砖石的html结构
+    }));
+
+    /**
+     * 方法三：
+     * 简化合并
+     * 使用Vue.component('组件名称',template组件要展示的html内容)
+     *
+     * 模板内有且只有唯一的一个根元素，不可元素并列
+     * */
+    Vue.component('mycom2',{
+        template:`<div>
+             <h3>这是通过方法三：Vue.extend创建的组件</h3>
+             <span>减肥if互粉互</span>
+        </div>`
+    });
+
+
+    /**
+     *  好用
+     * 方法四：
+     * 通过外部的<template></template>元素，内容为要展示的模板
+     * 使用Vue.component('组件名称',template标签的id属性)
+     *
+     * 模板内有且只有唯一的一个根元素，不可元素并列 所以最外层用div包裹
+     * */
+    Vue.component('mycom3',{
+        template:'#temp1'
+    });
+
+    /**
+     * * *************************   组件内部    *****************************
+     * 组件内部
+     * 组件可以有自己 data 数据
+     * 实例中的data可以为一个对象  但组件中的data 必须是一个方法
+     * 组件中的data方法内部 必须返回 一个对象
+     */
+    Vue.component('mycom4',{
+        template:'#temp3',
+        data:function () {
+            return {
+                message:'这是组件中的data定义的数据'
+            }
+        }
+    });
+
+    /**
+     * vue 的所学属性
+     * **************************   私有组件  ****************************
+     */
+    const app = new Vue({
+        el:'#app',
+        data:{},
+        methods:{},
+        computed:{},
+        filters:{},
+        directives:{},
+        //实例内部私有组件
+        components:{
+            login:{   //组件名
+                template:'#temp2'  //组件模板对象
+            }
+        },
+
+        //生命周期钩子函数
+        beforeCreate(){},
+        created(){},
+        beforeMount(){},
+        mounted(){},
+        beforeUpdate(){},
+        updated(){},
+        beforeDestroy(){},
+        destroy(){}
+    });
+</script>
+</body>
+</html>

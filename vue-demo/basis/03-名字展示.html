@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <label>
+        姓氏：<input type="text" value='' v-model="firstname">
+    </label>
+    <label>
+        名字：<input type="text" value="" v-model="lastname">
+    </label>
+    <p>{{firstname+lastname}}</p>
+</div>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+
+    //jquery 提高了Dom操作
+    //vue极大的解放了Dom 操作
+    new Vue({
+        el:'#app',
+        data:{
+            firstname:'',
+            lastname:''
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小球动画</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <style>
+        .ball{
+            width: 20px;
+            height: 20px;
+            background-color: #f43731;
+            border-radius: 50%;
+        }
+
+    </style>
+</head>
+<body>
+<div id="app">
+    <input type="button" value="加入购物车" @click="show = !show">
+    <transition
+    @before-enter="beforeEnter"
+    @enter="enter"
+    @after-enter="afterEnter">
+        <div class="ball" v-if="show"></div>
+    </transition>
+</div>
+
+<script>
+    new Vue({
+        el:'#app',
+        data:{
+            show:false
+        },
+        methods:{
+            beforeEnter(el){
+                el.style.transform = 'translate(0,0)';
+            },
+            enter(el,done){
+                el.offsetWidth;
+                el.style.transform ='translate(250px,350px)';
+                el.style.transition = 'all 1s ease';
+                done();
+            },
+            afterEnter(el){
+                this.show = !this.show;
+                //前半场  false--->true
+                //因为没有后半场  所以直接是 true-->false 跳过后半场动画  再进行前半场
+            }
+        }
+    })
+</script>
+</body>
+</html>

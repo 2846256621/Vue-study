@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>计算属性</title>
+    <script src="jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <h2>{{message}}</h2>
+    <h2>{{reverseMessage}}</h2>
+    <ul>
+        <li v-for="item in person" @click="handleNum(item.id)">id：{{item.id}}，姓名：{{item.name}}</li>
+    </ul>
+    <ul>
+        <li v-for="item in newPerson" >id：{{item.id}}，姓名：{{item.name}}</li>
+    </ul>
+</div>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+
+    const app = new Vue({
+        el:'#app',
+        data:{
+            message:"hello vue",
+            person:[{id:1,name:"李明"},{id:2,name:"李明2"},{id:3,name:"李明3"}]
+        },
+        methods:{
+            handleNum (id){
+                id++;
+                console.log(id);
+            }
+
+        },
+        computed:{
+            reverseMessage(){
+                return this.message.split('').reverse().join('');
+            },
+            newPerson(){
+                return this.person.filter(item => item.id <= 2);
+            }
+        }
+    })
+</script>
+</body>
+</html>

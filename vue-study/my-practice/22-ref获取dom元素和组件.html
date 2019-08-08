@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ref获取dom元素和组件</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+</head>
+<body>
+<div id="app">
+    <input type="button" value="获取元素" @click="getElement" ref="my_input">
+    <h2 ref="my_h2">哈哈哈哈</h2>
+    <hr>
+    <login ref="my_login"></login>
+</div>
+
+<script>
+    //组件
+    const login = {
+        template:'<h2>登录组件</h2>',
+        data(){
+            return {
+                msg:'son msg'
+            }
+        },
+        methods: {
+            show(){
+                console.log("调用了子组件的方法");
+
+            }
+        }
+    };
+    const app = new Vue({
+        el:'#app',
+        data:{},
+        methods:{
+            getElement(){
+                console.log(this.$refs.my_login.msg);
+                this.$refs.my_login.show(); //父组件调用子组件的 方法  数据
+            }
+        },
+        components:{
+            login:login
+        }
+    })
+</script>
+</body>
+</html>

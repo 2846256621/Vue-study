@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <label>
+        计数：<input type="text" v-model="number">
+    </label>
+    <button v-on:click ="handleIncrement">点击+1</button>
+</div>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+     <script>
+         const app = new Vue({
+             el:'#app',
+             data:{
+                 number:1,
+             },
+             methods:{
+                 handleIncrement:function () {
+                     this.number++;
+                 }
+             }
+         });
+     </script>
+</body>
+</html>

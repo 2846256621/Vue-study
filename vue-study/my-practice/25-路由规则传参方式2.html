@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>路由规则</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-router-3.0.7.js"></script>
+</head>
+<body>
+<div id="app">
+
+    <!--如果直接在路由中使用查询字符串，给路由传递参数，则 不需要修改 路由规则的  path属性-->
+    <router-link to="/login/10/张三">登录</router-link>
+    <router-link to="/signup">注册</router-link>
+    <hr>
+    <router-view></router-view>
+</div>
+
+<template id="login">
+    <div>
+        <h3>登录</h3>
+        <div>
+            <h3>id:{{$route.params.id}}</h3>
+            <h3>name:{{$route.params.name}}</h3>
+        </div>
+    </div>
+</template>
+<template id="signup">
+    <div>
+        <h3>注册</h3>
+    </div>
+</template>
+
+<script>
+
+    let login = {
+        template:'#login',
+
+        // //组件的生命周期
+        created(){
+            console.log(this.$route.params.id);
+        }
+    };
+    let signup = {
+        template: '#signup',
+        data(){
+            return{
+                msg:'组件私有数据'
+            }
+        }
+    };
+
+    let routerObj = new VueRouter({
+        routes:[
+            {path:'/login/:id/:name',component:login},
+            {path:'/signup',component:signup},
+
+        ]
+    });
+    const app = new Vue({
+        el:'#app',
+        data:{},
+        methods:{},
+        router:routerObj
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>任务列表</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        #app{
+            width: 385px;
+            height: 300px;
+            border-radius: 10px;
+            position: absolute;
+            left: 50%;
+            top:50%;
+            transform: translate(-50%,-50%);
+        }
+        .down{
+            text-decoration: line-through;
+            color: #a7b9b6;
+        }
+        .del{
+            font-size: 12px;
+            color: #e9555b;
+            float: right;
+            margin-right: 15px;
+            padding: 0 4px;
+            cursor: pointer;
+        }
+        .con{
+            width: 80%;
+            margin: 15px auto;
+            border-bottom: 1px solid #cccccc;
+        }
+        #app-border{
+            width: 80%;
+            min-height: 160px;
+            border: 1px solid #8f9493;
+
+        }
+        input[type='text']{
+            width: 65%;
+            padding: 5px;
+        }
+        button{
+            padding: 5px 8px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <h1>Todo</h1>
+    <br>
+    <p>{{this.todos.filter((item)=>{ return !item.down; }).length}} of {{todos.length}} remaning [archive]</p>
+    <br>
+    <div id="app-border">
+        <div v-for="(item,index) in todos" class="con">
+            <input type="checkbox" v-model="item.down">
+            <!--v-bind动态绑定属性值，class给一个对象，key是类型，value是布尔值，当布尔值为true，则作用上key 样式。-->
+            <span v-bind:class="{down:item.down}">{{item.title}}</span>
+            <span class="del" v-on:click="handleDelete(index)">X</span>
+        </div>
+    </div>
+
+    <br>
+    <!--回车提交  @keydown.enter-->
+    <input type="text" value="" v-model="text" @keydown.enter="handleAdd">
+    <button v-on:click="handleAdd" >add</button>
+</div>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    let todos = [{
+        id:1,
+        title:"吃饭",
+        down:true
+    },{
+        id:2,
+        title:"睡觉",
+        down:false
+    },{
+        id:3,
+        title:"打豆豆",
+        down:false
+    },{
+        id:4,
+        title:"学习",
+        down:true
+    }];
+    const app = new Vue({
+        el:'#app',
+        data:{
+            todos: todos,
+            text:''
+        },
+        methods:{
+            handleAdd:function () {
+                const text = this.text.trim();
+                const todos = this.todos;
+                console.log(todos);
+                if(!text.length) return;
+                //数据驱动视图 数据改变 视图改变
+                todos.push({
+                    id:todos[todos.length -1].id+1,
+                    title: text,
+                    down:false
+                });
+                this.text ='';
+            },
+            handleDelete:function (index) {
+                 this.todos.splice(index,1); //开始删除的下标，删除的数量
+            }
+        }
+    })
+</script>
+</body>
+</html>

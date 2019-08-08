@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="header">
+    头部
+</div>
+<div class="aside">
+    侧边栏
+</div>
+<form action="" id="add_form">
+    <div>
+        <label for="title">标题</label>
+        <input type="text" name="title" id="title" value="">
+    </div>
+    <div>
+        <input type="submit" value="保存">
+    </div>
+</form>
+<script src="../node_modules/art-template/lib/template-web.js"></script>
+<script src="../node_modules/jquery/dist/jquery.js"></script>
+<script>
+    $('#add_form').on('submit',handleSumbit);
+    function handleSumbit(e) {
+        e.preventDefault(); //阻止表单默认事件
+        console.log($(this).serialize()); //title=
+     // jQuery的serialize()方法通过序列化表单值，创建URL编码文本字符串
+        $.post('http://localhost:8080/datas',$(this).serialize(),function (data) {
+             window.location.href='../index.html';
+        })
+    }
+</script>
+</body>
+</html>

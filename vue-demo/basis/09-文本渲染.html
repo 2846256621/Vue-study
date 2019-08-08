@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="app">
+    <div v-text="message"></div>
+    <div v-html="message"></div>
+
+</div>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    const app = new Vue({
+        el:'#app',
+        data:{
+            message:"<h3>计划高度高度郭德纲递归</h3>",
+        }
+    });
+</script>
+</body>
+</html>

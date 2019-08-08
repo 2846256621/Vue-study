@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>品牌管理+axios</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <link href="../lib/bootstrap-3.3.7.css" rel="stylesheet">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        #app{
+            margin: 4%;
+            border: 1px solid #cccccc;
+        }
+        .title{
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="app" class="col-md-11" >
+    <div class="title">
+        <h3>品牌管理</h3>
+    </div>
+    <hr>
+    <br>
+    <div class="form-inline">
+        <label>
+            品牌名：<br>
+            <input type="text" name="name" value="" class="form-control"
+                   v-model="name" @keydown.enter="handleEnterAdd">
+        </label>
+        <input type="button" value="点击添加" class="btn btn-success" @click="handleAdd">
+    </div>
+    <br>
+    <div>
+        <label>
+            输入关键字进行查询：<input type="text" name="search" value="" class="form-control"
+                             v-model="keywords" @keydown.enter="Search">
+        </label>
+        <input type="button" value="点击查询" class="btn btn-success">
+    </div>
+    <hr>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered ">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>名字</th>
+                <th>生产日期</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="item in list" :key="item.id">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <!--时间个格式化 利用过滤器去判断-->
+                <td>{{item.date | dateFormat}}</td>
+                <td @click="handleDelete(item.id)" style="cursor: pointer">删除</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            name: "",
+            keywords: "",
+            list: "", //请求的列表
+        },
+        //数据加载完成  在这里去发ajax
+        created() {
+            this.getAllList()
+        },
+        methods: {
+            //获取数据列表
+            getAllList(){
+                axios.get('http://localhost:8080/').then((result)=>{
+                    this.list = result.data.list
+                }).catch((result)=>{
+                    console.log(result);
+                });
+            },
+            handleAdd(){
+                let data = {
+                    id: parseInt(this.list[this.list.length - 1].id) + 1,
+                    name: this.name,
+                    date: new Date()
+                };
+                axios.post('http://localhost:8080/add',data).then((result)=>{
+                    if (result.data.status === 0) {
+                        this.getAllList(); //添加完成后，重新获取列表数据
+                    }
+                    else {
+                        alert("添加失败")
+                    }
+                }).catch((result)=>{
+                    console.log(result);
+                });
+                this.name = '';
+            },
+            handleEnterAdd(){
+                let data = {
+                    id: parseInt(this.list[this.list.length - 1].id) + 1,
+                    name: this.name,
+                    date: new Date()
+                };
+                axios.post('http://localhost:8080/add',data).then((result)=>{
+                    if (result.data.status === 0) {
+                        this.getAllList(); //添加完成后，重新获取列表数据
+                    }
+                    else {
+                        alert("添加失败")
+                    }
+                }).catch((result)=>{
+                    console.log(result);
+                });
+                this.name = '';
+            },
+            handleDelete(id){
+                axios.get('http://localhost:8080/del?id='+id).then((result)=>{
+                    if (result.data.status === 0) {
+                        this.getAllList(); //添加完成后，重新获取列表数据
+                    }
+                    else {
+                        alert("删除失败")
+                    }
+                }).catch((result)=>{
+                    console.log(result);
+                })
+            },
+            Search(){
+                if(this.keywords.trim() === ""){
+                    this.getAllList();
+                }
+                else{
+                    axios.get('http://localhost:8080/search?name='+this.keywords).then((result)=>{
+                      this.list = result.data;
+                    }).catch((result)=>{
+                        console.log(result);
+                    })
+                }
+            }
+        },
+        filters: {
+            //时间格式  使用过滤器  参数使用默认值-->针对 万一没有传参
+            'dateFormat': function (date, dtFormatstr = "") {
+                let dt = new Date();
+                let y = dt.getFullYear();
+                let m = (dt.getMonth() + 1).toString().padStart(2, '0');
+                let d = dt.getDate().toString().padStart(2, '0');
+                if (dtFormatstr.toLowerCase() === 'yyyy-mm-dd') {
+                    return `${y}-${m}-${d} `
+                }
+                else {
+                    let hh = dt.getHours();
+                    let mm = dt.getMinutes().toString().padStart(2, '0');
+                    let ss = dt.getSeconds().toString().padStart(2, '0');
+                    return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+                }
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>品牌管理+过滤器</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <link href="../lib/bootstrap-3.3.7.css" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #app{
+            margin: 90px;
+            border: 1px solid #cccccc
+        }
+        .title{
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="app" class="col-md-11" >
+    <div class="title">
+        <h3>品牌管理</h3>
+    </div>
+    <hr>
+    <br>
+    <div class="form-inline">
+        <label>
+            NAME：<br>
+            <input type="text" name="name" value=""
+                   class="form-control"
+                   placeholder="please write name ..."
+                   v-model="name"
+                   @keydown.enter="handleEnterAdd">
+        </label>
+        <input type="button" value="点击添加" class="btn btn-success"
+               @click="handleAdd"
+        >
+    </div>
+    <br>
+    <div>
+        <label>
+            输入关键字进行查询：<input type="text" name="search" value="" class="form-control" v-model="keywords">
+        </label>
+    </div>
+    <hr>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered " >
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>名字</th>
+                <th>生产日期</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="item in Search(keywords)" :key="item.id">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <!--时间个格式化 利用过滤器去判断-->
+                <td>{{item.date | dateFormat('yyyy-mm-dd')}}</td>
+                <td @click="handleDelete(item.id)" style="cursor: pointer">删除</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    //时间格式  使用过滤器  参数使用默认值-->针对 万一没有传参
+    Vue.filter('dateFormat',function (date,dtFormatstr="") {
+        let dt = new Date();
+        let y = dt.getFullYear();
+        let m = (dt.getMonth() +1).toString().padStart(2,'0');
+        let d = dt.getDate().toString().padStart(2,'0');
+        if(dtFormatstr.toLowerCase() === 'yyyy-mm-dd'){
+            return `${y}-${m}-${d} `
+        }
+        else {
+            let hh = dt.getHours();
+            let mm = dt.getMinutes().toString().padStart(2,'0');
+            let ss = dt.getSeconds().toString().padStart(2,'0');
+            return `${y}-${m}-${d}-${hh}:${mm}:${ss}`
+        }
+    });
+    new Vue({
+        el:'#app',
+        data:{
+            name:"",
+            keywords:"",
+            list:[
+                {id:1,name:"奔驰",date:new Date()},
+                {id:2,name:"宝马",date:new Date()},
+                {id:3,name:"奥迪",date:new Date()},
+                {id:4,name:"劳斯莱斯",date:new Date()},
+
+            ]
+        },
+        methods:{
+            handleAdd(){
+                this.list.push({
+                    id:this.list[this.list.length -1].id +1,
+                    name:this.name,
+                    date:new Date()
+                });
+                this.name = '';
+            },
+            handleEnterAdd(){
+                this.list.push({
+                    id:this.list[this.list.length -1].id +1,
+                    name:this.name,
+                    date:new Date()
+                });
+                this.name = '';
+            },
+            handleDelete(id){
+                this.list = this.list.filter( item=>{
+                    return id !== item.id;
+                })
+            },
+            //根据关键字 进行搜索 不能再原本的list 对象数组上做修改，得新创建数组进行操作
+            Search(keywords){
+                let newLists = this.list.filter(item =>{
+                    if(item.name.includes(keywords)){
+                        return item;
+                    }
+                });
+                return newLists;
+            }
+        }
+    })
+</script>
+</body>
+</html>

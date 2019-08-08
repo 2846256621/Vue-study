@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>路由嵌套</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-router-3.0.7.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <style>
+        #app{
+            width: 700px;
+            height: 500px;
+            margin: 20px;
+            border: 1px solid #cccccc;
+            padding:50px;
+        }
+        .from{
+            width: 500px;
+            height: 350px;
+            margin: 20px;
+            border: 1px solid #cccccc;
+            padding:50px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <router-link to="/account">Account</router-link>
+    <!--路由展示的匹配到的组件 account-->
+    <router-view></router-view>
+</div>
+
+<template id="account">
+    <div class="from">
+        <h4>这是Account组件<br>登录&注册都是account的子路由</h4>
+        <hr>
+        <router-link to="/account/login">登录</router-link>
+        <router-link to="/account/signup" class="signup">注册</router-link>
+        <!--子路由展示的匹配到的组件 login signup-->
+        <transition mode="out-in">
+            <router-view></router-view>
+        </transition>
+
+    </div>
+</template>
+
+<template id="signup">
+    <form class="form-inline">
+        <label>
+            用户名：<input type="text" name="username" value="" placeholder="请输入用户名" class="form-control">
+        </label>
+        <br>
+        <label>
+            密码：<input type="text" name="username"  value="" placeholder="请输入密码" class="form-control">
+        </label>
+        <br>
+        <label>
+            确认密码：<input type="text" name="username"  value="" placeholder="请再次输入密码" class="form-control">
+        </label>
+        <br>
+        <input type="submit" value="注册" class="btn btn-primary">
+    </form>
+</template>
+
+<template id="login">
+    <form class="form-inline">
+        <label>
+            用户名：<input type="text" name="username"  value="" placeholder="请输入您的用户名" class="form-control">
+        </label>
+        <br>
+        <label>
+            密码：<input type="text" name="username" value="" placeholder="请输入您的密码" class="form-control">
+        </label>
+        <br>
+        <input type="submit" value="登录" class="btn btn-success">
+    </form>
+</template>
+<script>
+
+
+    /** 嵌套路由
+     * login signup 都是account的子路由
+     * 使用children实现子路由的嵌套  path前面不加 斜线
+     * */
+    let login = {
+        template:'#login'
+    };
+    let signup = {
+        template: '#signup'
+    };
+    let account = {
+        template:'#account'
+    };
+    let routerObj = new VueRouter({
+        routes:[
+            {
+                path:'/account',
+                component:account,
+                //TODO 子路由 path前面不加 斜线
+                children:[
+                    {path:'login',component:login},
+                    {path:'signup',component:signup},
+                ]
+            },
+        ],
+        linkActiveClass:'myactive', //自定义路由切换的类
+    });
+
+    const app = new Vue({
+        el:'#app',
+        data:{},
+        methods:{},
+        router:routerObj
+    })
+</script>
+</body>
+</html>

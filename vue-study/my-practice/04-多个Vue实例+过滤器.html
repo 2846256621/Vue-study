@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>多个vue实例+过滤器</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <link href="../lib/bootstrap-3.3.7.css" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #app{
+            margin: 90px;
+            border: 1px solid #cccccc
+        }
+        .title{
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="app1" class="col-md-6" >
+    <div class="title">
+        <h3>{{name | textFormat}}</h3>
+        <h2>{{new Date() |dateFormat("yyyy-mm-dd")}}</h2>
+    </div>
+</div>
+
+<div id="app2" class="col-md-6">
+    <h3>{{message}}</h3>
+    <h2>{{new Date() | dateFormat}}</h2>
+</div>
+
+<script>
+    //全局过滤器 所有实例都共有此过滤器
+    Vue.filter('dateFormat',function (date,dtFormatstr="") {
+        let dt = new Date();
+        let y = dt.getFullYear();
+        let m = dt.getMonth() +1;
+        let d = dt.getDate();
+        if(dtFormatstr.toLowerCase() === 'yyyy-mm-dd'){
+            return `${y}-${m}-${d} `
+        }
+        else {
+            let hh = dt.getHours();
+            let mm = dt.getMinutes();
+            let ss = dt.getSeconds();
+            return `${y}-${m}-${d}-${hh}:${mm}:${ss}`
+        }
+    });
+
+
+    //可以创建私有的过滤器
+    let app1 = new Vue({
+        el:'#app1',
+        data:{
+            name:"我是第一个 Vue实例",
+        },
+        methods:{},
+        //定义私有过滤器
+        // 使用时，若过滤器同名 采取 就近原则 先使用私有
+        filters: {
+            dateFormat: function (date, dtFormatstr = "") {
+                let dt = new Date();
+                let y = dt.getFullYear();
+                let m = (dt.getMonth() + 1).toString().padStart(2,'0');
+                let d = dt.getDate().toString().padStart(2,'0');
+                if (dtFormatstr.toLowerCase() === 'yyyy-mm-dd') {
+                    return `${y}-${m}-${d} `
+                }
+                else {
+                    let hh = dt.getHours();
+                    let mm = dt.getMinutes().toString().padStart(2,'0');
+                    let ss = dt.getSeconds().toString().padStart(2,'0');
+                    return `${y}-${m}-${d}-${hh}:${mm}:${ss}`
+                }
+            }
+        }
+    });
+    let app2 = new Vue({
+       el:'#app2',
+       data:{
+           message:"我是第二个 Vue实例"
+       }
+    })
+</script>
+</body>
+</html>

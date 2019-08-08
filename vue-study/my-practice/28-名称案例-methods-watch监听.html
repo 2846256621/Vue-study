@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>名称案例 watch</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-router-3.0.7.js"></script>
+</head>
+<body>
+<!--实现名字的拼接-->
+<div id="app">
+    <!--方法一：keyup 触发 拼接事件-->
+    <!--<input type="text" v-model="firstname" @keyup="getFullname">+-->
+    <!--<input type="text" v-model="lastname" @keyup="getFullname">=-->
+    <!--<input type="text" v-model="fullname" >-->
+
+
+    <!--方法二：watch 监听数据改变 触发拼接事件-->
+    <input type="text" v-model="firstname">+
+    <input type="text" v-model="lastname">=
+    <input type="text" v-model="fullname" >
+</div>
+
+
+
+<script>
+    const app = new Vue({
+        el:'#app',
+        data:{
+            firstname:'',
+            lastname:'',
+            fullname:''
+        },
+        methods:{
+            // getFullname(){
+            //     this.fullname = this.firstname+"-"+ this.lastname;
+            // }
+        },
+        watch:{
+            'firstname':function (newVal,oldVal) {
+                //有两个参数 newVal，oldVal
+                // this.fullname = this.firstname+"-"+ this.lastname;
+                this.fullname = newVal+"-"+ this.lastname;
+            },
+            'lastname':function (newVal,oldVal) {
+                this.fullname = this.firstname + newVal;
+            }
+        }
+    })
+</script>
+</body>
+</html>

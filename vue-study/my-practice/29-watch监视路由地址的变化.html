@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>watch监视路由地址的改变</title>
+    <script src="../lib/vue-2.4.0.js"></script>
+    <script src="../lib/vue-router-3.0.7.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap-3.3.7.css">
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+<div id="app">
+
+    <router-link to="/login">登录</router-link>
+    <router-link to="/signup" class="signup">注册</router-link>
+    <hr>
+    <transition mode="out-in">
+        <router-view></router-view>
+    </transition>
+
+</div>
+<!--html模板-->
+<template id="signup">
+    <form class="form-inline">
+        <label>
+            用户名：<input type="text" name="username" value="" placeholder="请输入用户名" class="form-control">
+        </label>
+        <br>
+        <label>
+            密码：<input type="text" name="username"  value="" placeholder="请输入密码" class="form-control">
+        </label>
+        <br>
+        <label>
+            确认密码：<input type="text" name="username"  value="" placeholder="请再次输入密码" class="form-control">
+        </label>
+        <br>
+        <input type="submit" value="注册" class="btn btn-primary">
+    </form>
+</template>
+
+<template id="login">
+    <form class="form-inline">
+        <label>
+            用户名：<input type="text" name="username"  value="" placeholder="请输入您的用户名" class="form-control">
+        </label>
+        <br>
+        <label>
+            密码：<input type="text" name="username" value="" placeholder="请输入您的密码" class="form-control">
+        </label>
+        <br>
+        <input type="submit" value="登录" class="btn btn-success">
+    </form>
+</template>
+
+<script>
+    let login = {
+        template:'#login'
+    };
+    let signup = {
+        template: '#signup'
+    };
+
+    let routerObj = new VueRouter({
+        routes:[
+            {path:'/',redirect:'/login'},
+            {path:'/login',component:login},
+            {path:'/signup',component:signup},
+        ],
+        linkActiveClass:'myactive',
+
+    });
+
+    const app = new Vue({
+        el:'#app',
+        data:{},
+        methods:{},
+        router:routerObj,
+        watch:{
+            //watch 用来监听非dom元素的改变
+            '$route.path':function (newVal,oldVal) {
+                // console.log(newVal+"-----"+oldVal);
+                if(newVal ==='/login'){
+                    console.log("欢迎进入登录页面");
+                }
+                else if(newVal ==='/signup'){
+                    console.log("欢迎进入注册页面");
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>
